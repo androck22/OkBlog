@@ -110,15 +110,12 @@ namespace OkBlog.Controllers
                     user.LastName = model.LastName;
                     user.Email = model.Email;
                     user.UserName = model.Email;
-                    //user.PasswordHash = model.Password;
 
                     var result = await _userManager.UpdateAsync(user);
-                    await _userManager.ChangePasswordAsync(user,
-                    model.CurrentPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
-                        await _signInManager.RefreshSignInAsync(user);
-                        return RedirectToAction("Index");
+                        //await _signInManager.RefreshSignInAsync(user);
+                        return RedirectToAction("Index", "Users");
                     }
                     else
                     {
