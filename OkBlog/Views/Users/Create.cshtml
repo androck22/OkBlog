@@ -1,0 +1,38 @@
+﻿@model OkBlog.ViewModels.CreateUserViewModel
+@{
+    ViewBag.Title = "Добавление пользователя";
+}
+
+<h2>Добавление пользователя</h2>
+<form method="post" asp-action="Create" asp-controller="Users">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <label asp-for="FirstName">Имя</label><br />
+        <input class="form-control" asp-for="FirstName" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="LastName">Фамилия</label><br />
+        <input class="form-control" asp-for="LastName" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input class="form-control" asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input class="form-control" asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+    </div>
+    <div>
+        <p></p>
+        <input class="btn btn-sm btn-primary" type="submit" value="Доавить пользователя" />
+    </div>
+</form>

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<OkBlog.Models.Db.ApplicationRole>
+@{
+    ViewBag.Title = "Список ролей";
+}
+ 
+<h2>Список ролей</h2>
+<table class="table">
+    <tr><th>Название</th><th>Описание</th>
+    @foreach (var role in Model)
+    {
+        <tr>
+            <td>
+                @role.Name
+            </td>
+            <td>
+                <textarea name="Description" class="form-control" rows="3" value="" readonly>@role.Description</textarea>
+            </td>          
+            <td>
+                <form class="right-position" asp-action="Delete" asp-route-id="@role.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="EditRole" asp-route-id="@role.Id">Изменить</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+<a class="btn btn-sm btn-primary" asp-action="Create">Добавить роль</a>
+<a class="btn btn-sm btn-primary" asp-action="UserList">Список пользователей</a>

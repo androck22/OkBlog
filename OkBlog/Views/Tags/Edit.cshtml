@@ -1,0 +1,22 @@
+﻿@model Tag
+@{
+
+}
+
+<div>
+    <h2>Редактирование тега</h2>
+    <br />
+	<form asp-action="Edit" asp-controller="Tags" method="post">
+        <input asp-for="Id" type="hidden" />
+	    <div>
+            <label>Name</label>
+            <input class="form-control" asp-for="Name" />
+        </div>
+        <br />
+        <input class="btn btn-sm btn-primary" type="submit" value="Сохранить" />
+    </form>
+    <br />
+    <p>
+        <a asp-action="Index">Перейти к списку всех тегов</a>
+    </p>
+</div>

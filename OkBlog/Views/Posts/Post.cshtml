@@ -1,0 +1,69 @@
+﻿@model PostViewModel
+
+@{
+
+}
+
+<div class="container">
+	<h2>@Model.Title</h2>
+
+	<div>
+		@for (int i = 0; i < Model.Tags.Count; i++)
+			{
+				if (Model.Tags[i].IsSelected)
+				{
+					<span class="badge bg-primary text-white">@Model.Tags[i].Name</span>
+				}	
+			}
+	</div>
+	<br />
+	
+	<p>
+		<a asp-controller="EditPost" asp-action="Edit" asp-route-id="@Model.Id">Редактировать статью</a>
+	</p>
+
+	<div>@Model.Body</div>
+
+	<div>
+		<br />
+		<span class="badge bg-success text-white float-right">@Model.Author</span>
+	</div>
+
+	<br />
+
+	<div class="comment-section">
+		<h6>Комментарии к статье</h6>
+		
+		@foreach (var c in Model.MainComments)
+		{
+			<div>
+				@c.Message
+			</div>
+			<p class="card-body">
+				<span class="badge bg-success text-white float-right">@c.UserName</span>
+				<span>- @c.Created -</span>
+			</p>
+			<br />
+			@*<div style="margin-left: 20px;">
+				<h6>Sub Comment</h6>
+				@{
+					await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
+				}
+
+				@foreach(var sc in c.SubComments)
+				{
+					<p>
+						@sc.Message --- @sc.Created
+					</p>
+				}
+			</div>*@
+		}
+		<br />
+		<h6>Оставте ваш комментарий</h6>
+
+		@{
+			await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
+		}
+	</div>
+</div>
+
