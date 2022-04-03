@@ -19,14 +19,15 @@ namespace OkBlog.Controllers
         private IRepository _repo;
         private ITagRepository _tagRepo;
         private readonly ILogger<PanelController> _logger;
+        UserManager<ApplicationUser> _userManager;
 
-
-        public PostsController(IRepository repo, ITagRepository tagRepo, ILogger<PanelController> logger)
+        public PostsController(IRepository repo, ITagRepository tagRepo, ILogger<PanelController> logger, UserManager<ApplicationUser> userManager)
         {
             _repo = repo;
             _tagRepo = tagRepo;
             _logger = logger;
             _logger.LogDebug(1, "NLog injected into HomeController");
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -43,6 +44,7 @@ namespace OkBlog.Controllers
 
             var tagsId = post.Tags.Select(x => x.Id).ToList();
             var postTags = _tagRepo.GetAllTags().Select(t => new TagViewModel { Id = t.Id, Name = t.Name, IsSelected = tagsId.Contains(t.Id) }).ToList();
+            var userEmail = _userManager.GetUserName(HttpContext.User);
 
             PostViewModel model = new PostViewModel
             {
@@ -52,6 +54,7 @@ namespace OkBlog.Controllers
                 Author = post.Author,
                 Tags = postTags,
                 MainComments = post.MainComments,
+                CurrentUserName = userEmail
             };
 
             return View(model);
@@ -60,6 +63,9 @@ namespace OkBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Comment(CommentViewModel model)
         {
+            var userEmail = _userManager.GetUserName(HttpContext.User);
+
+
             if (!ModelState.IsValid)
                 return RedirectToAction("Post", new { id = model.PostId });
 
@@ -72,7 +78,7 @@ namespace OkBlog.Controllers
                 {
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName = model.UserName,
+                    UserName = userEmail,
                 });
 
                 PostViewModel vm = new PostViewModel();
@@ -81,7 +87,7 @@ namespace OkBlog.Controllers
                     Id = model.PostId,
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName=model.UserName,
+                    UserName = userEmail,
                 });
 
                 _repo.UpdatePost(post);                
@@ -93,7 +99,7 @@ namespace OkBlog.Controllers
                     MainCommentId = model.MainCommentId,
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName = model.UserName,
+                    UserName = userEmail,
                 };
                 _repo.AddSubComment(comment);
             }

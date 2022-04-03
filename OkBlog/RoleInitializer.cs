@@ -31,7 +31,6 @@ namespace OkBlog
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Admin");
-                    await userManager.AddToRoleAsync(admin, "Moderator");
                     await userManager.AddToRoleAsync(admin, "User");
                 }
             }

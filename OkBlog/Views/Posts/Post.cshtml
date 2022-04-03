@@ -18,9 +18,12 @@
 	</div>
 	<br />
 	
-	<p>
-		<a asp-controller="EditPost" asp-action="Edit" asp-route-id="@Model.Id">Редактировать статью</a>
-	</p>
+	@if(@Model.Author == @Model.CurrentUserName || @User.IsInRole("Admin") || @User.IsInRole("Moderator"))
+	{
+		<p>
+			<a asp-controller="EditPost" asp-action="Edit" asp-route-id="@Model.Id">Редактировать статью</a>
+		</p>
+	}	
 
 	<div>@Model.Body</div>
 

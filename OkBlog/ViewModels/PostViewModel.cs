@@ -12,6 +12,8 @@ namespace OkBlog.ViewModels
         public string Body { get; set; }
         public string Author { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+
+        public string CurrentUserName { get; set; }
         public List<TagViewModel> Tags { get; set; }
         public List<MainComment> MainComments { get; set; } = new List<MainComment>();
     }

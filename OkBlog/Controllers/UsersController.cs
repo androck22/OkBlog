@@ -50,6 +50,24 @@ namespace OkBlog.Controllers
             return View(models);
         }
 
+        public IActionResult GetUser()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            ApplicationUser user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
+
+            var model = new UserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Created = user.Created
+            };
+
+            return View(model);
+        }
+
         public IActionResult Create() => View();
 
         [HttpPost]
@@ -114,8 +132,12 @@ namespace OkBlog.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        //await _signInManager.RefreshSignInAsync(user);
-                        return RedirectToAction("Index", "Users");
+                        if (User.IsInRole("Admin"))
+                        {
+                            return RedirectToAction("Index", "Users");
+                        }
+
+                        return RedirectToAction("GetUser", "Users");
                     }
                     else
                     {
@@ -137,7 +159,13 @@ namespace OkBlog.Controllers
             {
                 IdentityResult result = await _userManager.DeleteAsync(user);
             }
-            return RedirectToAction("Index");
+
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Users");
+            }
+
+            return RedirectToAction("Register", "Account");
         }
     }
 }

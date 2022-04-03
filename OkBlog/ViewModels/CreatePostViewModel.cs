@@ -14,9 +14,6 @@ namespace OkBlog.ViewModels
         [Required]
         [Display(Name = "Body")]
         public string Body { get; set; } = String.Empty;
-        [Required]
-        [Display(Name = "Author")]
-        public string Author { get; set; } = String.Empty;
 
         public List<TagViewModel> Tags { get; set; }
     }

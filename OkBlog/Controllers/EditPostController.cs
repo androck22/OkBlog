@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
@@ -12,11 +13,13 @@ namespace OkBlog.Controllers
     {
         private IRepository _repo;
         private ITagRepository _tagRepo;
+        UserManager<ApplicationUser> _userManager;
 
-        public EditPostController(IRepository repo, ITagRepository tagRepo)
+        public EditPostController(IRepository repo, ITagRepository tagRepo, UserManager<ApplicationUser> userManager)
         {
             _repo = repo;
             _tagRepo = tagRepo;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -41,6 +44,34 @@ namespace OkBlog.Controllers
                     Tags = postTags
                 });
             }
+
+            return View(models);
+        }
+
+        public IActionResult GetUserPosts()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var userPosts = _repo.GetAllPosts().Where(x => x.UserId == userId);
+
+            List<PostViewModel> models = new List<PostViewModel>();
+
+            foreach (var post in userPosts)
+            {
+                var postId = post.Id;
+                var postGet = _repo.GetPost(postId);
+                var tagsId = post.Tags.Select(x => x.Id).ToList();
+                var postTags = _tagRepo.GetAllTags().Select(t => new TagViewModel { Id = t.Id, Name = t.Name, IsSelected = tagsId.Contains(t.Id) }).ToList();
+
+                models.Add(new PostViewModel
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Body = post.Body,
+                    Author = post.Author,
+                    Tags = postTags
+                });
+            }
+
             return View(models);
         }
 
@@ -50,7 +81,7 @@ namespace OkBlog.Controllers
             var post = _repo.GetPost((int)id);
             var tagsId = post.Tags.Select(x => x.Id).ToList();
             var postTags = _tagRepo.GetAllTags().Select(t => new TagViewModel { Id = t.Id, Name = t.Name, IsSelected = tagsId.Contains(t.Id) }).ToList();
-            EditPostViewModel model = new EditPostViewModel
+            CreatePostViewModel model = new CreatePostViewModel
             {
                 Id = post.Id,
                 Title = post.Title,
@@ -72,7 +103,6 @@ namespace OkBlog.Controllers
                 Id = post.Id,
                 Title = post.Title = string.Empty,
                 Body = post.Body = string.Empty,
-                Author = post.Author = string.Empty,
                 Tags = allTags
             };
 
@@ -87,6 +117,11 @@ namespace OkBlog.Controllers
             var tagsId = postTags.Select(t => t.Id).ToList();
 
             var dbTags = _tagRepo.GetAllTags().Where(t => tagsId.Contains(t.Id)).ToList();
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var userEmail = _userManager.GetUserName(HttpContext.User);
+
             Post post = null;
 
             if (model.Id > 0)
@@ -94,8 +129,9 @@ namespace OkBlog.Controllers
                 post = _repo.GetPost(model.Id);
                 post.Title = model.Title;
                 post.Body = model.Body;
-                post.Author = model.Author;
+                post.Author = userEmail;
                 post.Tags = dbTags;
+                post.UserId = userId;
             }
             else
             {
@@ -104,10 +140,12 @@ namespace OkBlog.Controllers
                     Id = model.Id,
                     Title = model.Title,
                     Body = model.Body,
-                    Author = model.Author,
-                    Tags = dbTags
+                    Tags = dbTags,
+                    Author = userEmail,
+                    UserId = userId
                 };
             }
+
 
             if (post.Id > 0)
                 _repo.UpdatePost(post);
@@ -116,7 +154,14 @@ namespace OkBlog.Controllers
 
             if (await _repo.SaveChangesAsync())
             {
-                return RedirectToAction("Index");
+                if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("GetUserPosts");
+                }
             }
             else
             {

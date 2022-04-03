@@ -29,13 +29,16 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="Create">Create Post</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="Index">Edit Post</a>
-                        </li>
+                        </li>                        
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Tags" asp-action="Create">Add Tags</a>
-                        </li>                                 
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="GetUserPosts">User Posts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="GetUser">User Information</a>
+                        </li>
                         @if(User.IsInRole("Admin")) 
                         {
                           <li class="nav-item dropdown">
@@ -45,6 +48,8 @@
                           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             <li><a class="dropdown-item text-light" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
                             <li><a class="dropdown-item text-light" asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
+                            <li><a class="dropdown-item text-light" asp-area="" asp-controller="Tags" asp-action="Index">Tags</a></li>
+                            <li><a class="dropdown-item text-light" asp-area="" asp-controller="EditPost" asp-action="Index">Posts</a></li>
                           </ul>
                         </li>        
                         }
@@ -60,9 +65,6 @@
                           </ul>
                         </li>        
                         }  
-                        @*<li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                        </li>*@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangePassword">ChangePassword</a>
                         </li>
