@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using OkBlog.Data;
+using NLog;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.Models.Db.Comments;
@@ -18,30 +17,43 @@ namespace OkBlog.Controllers
     {
         private IRepository _repo;
         private ITagRepository _tagRepo;
-        private readonly ILogger<PanelController> _logger;
+        private readonly ILogger<PostsController> _logger;
         UserManager<ApplicationUser> _userManager;
 
-        public PostsController(IRepository repo, ITagRepository tagRepo, ILogger<PanelController> logger, UserManager<ApplicationUser> userManager)
+        public PostsController(IRepository repo, ITagRepository tagRepo, ILogger<PostsController> logger, UserManager<ApplicationUser> userManager)
         {
             _repo = repo;
             _tagRepo = tagRepo;
             _logger = logger;
-            _logger.LogDebug(1, "NLog injected into HomeController");
             _userManager = userManager;
         }
 
         public IActionResult Index()
         {
-            _logger.LogInformation("Hello, this is the index!");
-
             var posts = _repo.GetAllPosts();
+            _logger.LogInformation("PostsController Invoked");
+            try
+            {
+                var val = 1;
+                var i = val / 0;
+            }
+            catch (Exception)
+            {
+                _logger.LogError("Exception throw...");
+            }
+            _logger.LogDebug("Произведена выборка всех статей");
             return View(posts);
         }
 
         public IActionResult Post(int id)
         {
+            _logger.LogTrace("Запрашиваемый id статьи: " + id);
             var post = _repo.GetPost(id);
-
+            if (post is null)
+            {
+                _logger.LogError("Ошибка. Не найдена статья с указанным id: " + id);
+                return RedirectToAction("Index");
+            }
             var tagsId = post.Tags.Select(x => x.Id).ToList();
             var postTags = _tagRepo.GetAllTags().Select(t => new TagViewModel { Id = t.Id, Name = t.Name, IsSelected = tagsId.Contains(t.Id) }).ToList();
             var userEmail = _userManager.GetUserName(HttpContext.User);
@@ -56,6 +68,7 @@ namespace OkBlog.Controllers
                 MainComments = post.MainComments,
                 CurrentUserName = userEmail
             };
+            _logger.LogTrace("Выборка прошла успешно. Выбрана статья с id: " + post.Id);
 
             return View(model);
         }

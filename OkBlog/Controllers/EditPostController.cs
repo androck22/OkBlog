@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
@@ -14,12 +15,14 @@ namespace OkBlog.Controllers
         private IRepository _repo;
         private ITagRepository _tagRepo;
         UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<PostsController> _logger;
 
-        public EditPostController(IRepository repo, ITagRepository tagRepo, UserManager<ApplicationUser> userManager)
+        public EditPostController(IRepository repo, ITagRepository tagRepo, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger)
         {
             _repo = repo;
             _tagRepo = tagRepo;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -70,8 +73,8 @@ namespace OkBlog.Controllers
                     Author = post.Author,
                     Tags = postTags
                 });
+                _logger.LogTrace("Запрашиваемая статья пользователя с id: " + post.Id);
             }
-
             return View(models);
         }
 
@@ -88,7 +91,7 @@ namespace OkBlog.Controllers
                 Body = post.Body,
                 Tags = postTags,
             };
-
+            _logger.LogTrace("Редактирование статьи с id: " + post.Id);
             return View(model);
         }
 
@@ -105,7 +108,7 @@ namespace OkBlog.Controllers
                 Body = post.Body = string.Empty,
                 Tags = allTags
             };
-
+            _logger.LogTrace("Создание статьи с id: " + post.Id);
             return View(model);
         }
 
@@ -174,6 +177,7 @@ namespace OkBlog.Controllers
         {
             _repo.RemovePost(id);
             await _repo.SaveChangesAsync();
+            _logger.LogTrace("Удаление статьи с id: " + id);
             return RedirectToAction("Index");
         }
     }

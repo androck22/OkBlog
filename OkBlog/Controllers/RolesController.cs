@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
 using System;
@@ -15,10 +16,14 @@ namespace OkBlog.Controllers
     {
         RoleManager<ApplicationRole> _roleManager;
         UserManager<ApplicationUser> _userManager;
-        public RolesController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        private readonly ILogger<PostsController> _logger;
+
+        public RolesController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger;
+
         }
         public IActionResult Index() => View(_roleManager.Roles.ToList());
 
@@ -38,6 +43,8 @@ namespace OkBlog.Controllers
 
                 if (result.Succeeded)
                 {
+                    _logger.LogTrace($"Добавление роли: {applicationRole.Name} c Id: {applicationRole.Id}");
+
                     return RedirectToAction("Index", "Roles");
                 }
 
@@ -56,6 +63,8 @@ namespace OkBlog.Controllers
             ApplicationRole role = await _roleManager.FindByIdAsync(id);
             if (role != null)
             {
+                _logger.LogTrace($"Удаление роли: {role.Name} c Id: {role.Id}");
+
                 IdentityResult result = await _roleManager.DeleteAsync(role);
             }
             return RedirectToAction("Index");
@@ -73,6 +82,7 @@ namespace OkBlog.Controllers
             }
 
             EditRoleViewModel model = new EditRoleViewModel { Id = role.Id, Name = role.Name, Description = role.Description };
+            _logger.LogTrace($"Редактирование роли: {role.Name} c Id: {role.Id}");
 
             return View(model);
         }

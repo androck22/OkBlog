@@ -67,11 +67,14 @@ namespace OkBlog
                 {
                     var logger = appBuilder.ApplicationServices.GetRequiredService<ILogger<Startup>>();
                     var feature = context.Features.Get<IExceptionHandlerFeature>();
+
                     if (feature.Error is not null)
                     {
                         logger.LogError(feature.Error, "Exception Here!");
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         context.Response.ContentType = "application/json";
+                        //context.Request.Path = "/Home/500.cshtml";
+
                         await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
                         {
                             error = "Something went wrong!",
@@ -81,22 +84,22 @@ namespace OkBlog
                 });
             });
 
-            //env.EnvironmentName = "Production";
+            env.EnvironmentName = "Production";
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
             }
-            app.UseStatusCodePages("text/plain", "Resource note found!");
-            app.Map("/Home/Error", ap => ap.Run(async context =>
-            {
-                await context.Response.WriteAsync("Something went wrong!");
-            }));
+
+            //app.Run(async (context) =>
+            //{
+            //    int zero = 0;
+            //    int result = 4 / zero;
+            //    await context.Response.WriteAsync($"Page not found");
+            //});
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

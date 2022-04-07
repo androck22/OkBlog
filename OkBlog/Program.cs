@@ -20,7 +20,8 @@ namespace OkBlog
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+                //var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+                var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
                 try
                 {
@@ -28,13 +29,13 @@ namespace OkBlog
                     var rolesManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
                     await RoleInitializer.InitializeAsync(userManager, rolesManager);
 
-                    logger.Debug("init main");
+                    logger.Debug("Application Started...");
                     CreateHostBuilder(args).Build().Run();
                 }
                 catch (Exception exception)
                 {
                     //NLog: catch setup errors
-                    logger.Error(exception, "Stopped program because of exception");
+                    logger.Error(exception, "Exception during execution.");
                     throw;
                 }
                 finally

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
 using System;
@@ -17,18 +18,32 @@ namespace OkBlog.Controllers
         UserManager<ApplicationUser> _userManager;
         SignInManager<ApplicationUser> _signInManager;
         RoleManager<ApplicationRole> _roleManager;
+        private readonly ILogger<PostsController> _logger;
 
-        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ILogger<PostsController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string searchingId)
         {
-            var users = _userManager.Users.ToList();            
+            _logger.LogInformation("UsersController Invoked");
+
+            var users = _userManager.Users.ToList();
+            if (searchingId is null)
+            {
+                _logger.LogDebug("Произведена выборка всех пользователей");
+                users = _userManager.Users.ToList();
+            }
+            else
+            {
+                _logger.LogTrace("Запрашиваемый id пользователя: " + searchingId);
+                users = _userManager.Users.Where(x => x.Id == searchingId).ToList();
+            }
 
             List<UserViewModel> models = new List<UserViewModel>();
 
@@ -46,13 +61,12 @@ namespace OkBlog.Controllers
                     Id = user.Id, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, Created = user.Created, Roles = roles
                 });
             }
-
             return View(models);
         }
 
         public IActionResult GetUser()
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
+            var userId = _userManager.GetUserId(HttpContext.User);            
 
             ApplicationUser user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
 
@@ -80,6 +94,8 @@ namespace OkBlog.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "User");
+                    _logger.LogTrace($"Добавление пользователя: {user.Email} c Id: {user.Id}");
+
                     return RedirectToAction("Index");
                 }
                 else
@@ -95,14 +111,14 @@ namespace OkBlog.Controllers
 
         [Route("UserSearch")]
         [HttpPost]
-        public async Task<IActionResult> UserSearch(string id)
+        public async Task<IActionResult> Search(string id)
         {
             var model = new SearchViewModel
             {
                 UserSearch = await _userManager.FindByIdAsync(id)
-                //UserSearch = await _userManager.Users.AsEnumerable().Where(x => x.Id.Contains(id))
             };
-            return View("UserSearch", model);
+
+            return View("Search", model);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -132,6 +148,8 @@ namespace OkBlog.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
+                        _logger.LogTrace($"Редактирование пользователя: {model.Email} с Id: " + model.Id);
+
                         if (User.IsInRole("Admin"))
                         {
                             return RedirectToAction("Index", "Users");
@@ -157,6 +175,8 @@ namespace OkBlog.Controllers
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
+                _logger.LogTrace($"Удаление пользователя: {user.Email} c Id: {id}");
+
                 IdentityResult result = await _userManager.DeleteAsync(user);
             }
 
