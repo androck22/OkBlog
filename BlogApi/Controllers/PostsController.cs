@@ -99,7 +99,7 @@ namespace BlogApi.Controllers
         /// <response code="400">If the user is unauthorized</response>
         [HttpPost]
         [Route("Add")]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(typeof(PostResponse), 201)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         public async Task<IActionResult> Add([FromBody] AddPostModel model)

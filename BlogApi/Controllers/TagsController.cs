@@ -99,7 +99,7 @@ namespace BlogApi.Controllers
         /// <response code="400">Unable to create the tag due to validation error</response>
         [HttpPost]
         [Route("Add")]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(typeof(TagResponse), 201)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         public async Task<IActionResult> Add([FromBody] AddTagModel model)
