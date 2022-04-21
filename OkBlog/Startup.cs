@@ -1,12 +1,8 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +12,7 @@ using OkBlog.Data;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace OkBlog
 {
@@ -92,6 +84,7 @@ namespace OkBlog
             else
             {
                 app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+                //app.UseExceptionHandler("/Error");
             }
 
             //app.Run(async (context) =>

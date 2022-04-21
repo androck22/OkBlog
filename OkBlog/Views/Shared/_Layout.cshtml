@@ -26,19 +26,22 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Posts" asp-action="Index">All Posts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="Create">Create Post</a>
                         </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Tags" asp-action="Create">Add Tags</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="GetUserPosts">User Posts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="GetUser">User Information</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                          <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="Create">Create Post</a>
+                          </li>                        
+                          <li class="nav-item">
+                              <a class="nav-link text-light" asp-area="" asp-controller="Tags" asp-action="Create">Add Tags</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link text-light" asp-area="" asp-controller="EditPost" asp-action="GetUserPosts">User Posts</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="GetUser">User Information</a>
+                          </li>
+                        }                        
                         @if(User.IsInRole("Admin")) 
                         {
                         <li class="nav-item dropdown">
