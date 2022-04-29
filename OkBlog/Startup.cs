@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OkBlog.Data;
+using OkBlog.Data.FileManager;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.Validation;
@@ -44,6 +45,7 @@ namespace OkBlog
 
             services.AddTransient<IRepository, Repository>();
             services.AddTransient<ITagRepository, TagRepository>();
+            services.AddTransient<IFileManager, FileManager>();
 
             services.AddTransient<IUserValidator<ApplicationUser>, CustomUserValidator>();
 

@@ -7,7 +7,7 @@
 
 <h2>Добавление статьи</h2>
 
-<form method="post" asp-action="Upsert" asp-controller="EditPost">
+<form method="post" asp-action="Upsert" asp-controller="EditPost" enctype="multipart/form-data">
 	<div asp-validation-summary="All" class="text-danger"></div>
 	<input asp-for="Id" type="hidden" />
 	<table>
@@ -34,6 +34,10 @@
 		<label asp-for="Body">Контент</label><br />
 		<textarea class="form-control" rows="10" value="" asp-for="Body" ></textarea>
 		<span asp-validation-for="Body" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Image">Изображение</label><br />
+		<input asp-for="Image" class="form-control" ></input>
 	</div>
 	<input class="btn btn-sm btn-primary" type="submit" value="Добавить" />
 </form>

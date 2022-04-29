@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OkBlog.Data.FileManager;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
@@ -14,13 +15,15 @@ namespace OkBlog.Controllers
     {
         private IRepository _repo;
         private ITagRepository _tagRepo;
+        private IFileManager _fileManager;
         UserManager<ApplicationUser> _userManager;
         private readonly ILogger<PostsController> _logger;
 
-        public EditPostController(IRepository repo, ITagRepository tagRepo, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger)
+        public EditPostController(IRepository repo, ITagRepository tagRepo, IFileManager fileManager, UserManager<ApplicationUser> userManager, ILogger<PostsController> logger)
         {
             _repo = repo;
             _tagRepo = tagRepo;
+            _fileManager = fileManager;
             _userManager = userManager;
             _logger = logger;
         }
@@ -143,6 +146,7 @@ namespace OkBlog.Controllers
                     Id = model.Id,
                     Title = model.Title,
                     Body = model.Body,
+                    Image = await _fileManager.SaveImage(model.Image),
                     Tags = dbTags,
                     Author = userEmail,
                     UserId = userId

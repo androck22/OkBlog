@@ -59,15 +59,17 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
+   Margin bottom by footer height 
+  margin: 0;
   margin-bottom: 60px;
+  background-color: #80dee2;
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 60px;  Vertically center the text there 
 }
 
 /* Search styles
@@ -84,4 +86,68 @@ body {
 .right-position {
     position: absolute;
     right: auto;
+}
+
+/* Main page
+-------------------------------------------------- */
+/*body {
+    margin: 0;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+nav {
+    background-color: #142127;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+nav a {
+    display: inline-block;
+    padding: 15px;
+}*/
+
+.main-img {
+    position: relative;
+    height: 400px;
+    background-image: url('../content/static/main.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+.title {
+    position: absolute;
+    color: white;
+    font-size: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 35%;
+    text-shadow: 0 0 8px black;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+}
+
+.post {
+    margin: 5px;
+    position: relative;
+    display: flex;
+    height: 400px;
+    box-shadow: 0 0 5px 0 black;
+}
+
+.post img {
+    width: 100%;
+    object-fit: cover;
 }

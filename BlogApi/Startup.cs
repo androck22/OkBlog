@@ -22,6 +22,7 @@ using System.IO;
 using System;
 using Swashbuckle.AspNetCore.Filters;
 using BlogApi.Contracts.Filters;
+using BlogApi.AuthorizationPoliciesSample.Policies.Requirements;
 
 namespace BlogApi
 {
@@ -86,6 +87,12 @@ namespace BlogApi
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"]))
                     };
                 });
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("AtLeast18", policy =>
+            //        policy.Requirements.Add(new MinimumAgeRequirement(18)));
+            //});
 
             services.AddSwaggerGen(c =>
             {

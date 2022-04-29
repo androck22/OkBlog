@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog;
+using OkBlog.Data.FileManager;
 using OkBlog.Data.Repository;
 using OkBlog.Models.Db;
 using OkBlog.Models.Db.Comments;
@@ -17,13 +18,15 @@ namespace OkBlog.Controllers
     {
         private IRepository _repo;
         private ITagRepository _tagRepo;
+        private IFileManager _fileManager;
         private readonly ILogger<PostsController> _logger;
         UserManager<ApplicationUser> _userManager;
 
-        public PostsController(IRepository repo, ITagRepository tagRepo, ILogger<PostsController> logger, UserManager<ApplicationUser> userManager)
+        public PostsController(IRepository repo, ITagRepository tagRepo, IFileManager fileManager, ILogger<PostsController> logger, UserManager<ApplicationUser> userManager)
         {
             _repo = repo;
             _tagRepo = tagRepo;
+            _fileManager = fileManager;
             _logger = logger;
             _userManager = userManager;
         }
@@ -63,6 +66,7 @@ namespace OkBlog.Controllers
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
+                Image = post.Image,
                 Author = post.Author,
                 Tags = postTags,
                 MainComments = post.MainComments,
@@ -71,6 +75,13 @@ namespace OkBlog.Controllers
             _logger.LogTrace("Выборка прошла успешно. Выбрана статья с id: " + post.Id);
 
             return View(model);
+        }
+
+        [HttpGet("/Image/{image}")]
+        public IActionResult Image(string image)
+        {
+            var mime = image.Substring(image.LastIndexOf('.') + 1);
+            return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
 
         [HttpPost]

@@ -3,10 +3,15 @@
 @{
 
 }
-<h2>Все статьи</h2>
+@*<h2>Все статьи</h2>*@
 
-<div>
-	<ul>
+@*<img src="~/content/static/main2.jpg" width="500" />*@
+<div class="main-img" >
+	<span class="title">Welcom to the OkBlog!</span>
+</div>
+
+<div class="container">
+	@*<ul>
 		@foreach(var post in Model)
 		{
 			<li>
@@ -15,5 +20,15 @@
 				</a>
 			</li>
 		}
-	</ul>
+	</ul>*@
+	@foreach(var post in Model)
+	{
+		var image_path = $"/Image/{post.Image}";
+		<a class="post" asp-controller="Posts" asp-action="Post" asp-route-id="@post.Id">
+			<img src="@image_path" />
+			<span class="title">
+				@post.Title
+			</span>
+		</a>
+	}
 </div>

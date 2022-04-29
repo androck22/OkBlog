@@ -1,4 +1,5 @@
-﻿using OkBlog.Models.Db;
+﻿using Microsoft.AspNetCore.Http;
+using OkBlog.Models.Db;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,9 @@ namespace OkBlog.ViewModels
         [Required]
         [Display(Name = "Body")]
         public string Body { get; set; } = String.Empty;
+        [Display(Name = "Image")]
+        public IFormFile Image { get; set; } = null;
+
 
         public List<TagViewModel> Tags { get; set; }
     }
