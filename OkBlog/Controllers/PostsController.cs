@@ -31,19 +31,12 @@ namespace OkBlog.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string category)
         {
-            var posts = _repo.GetAllPosts();
+            var posts = string.IsNullOrEmpty(category) ? _repo.GetAllPosts() : _repo.GetAllPosts(category);
             _logger.LogInformation("PostsController Invoked");
-            try
-            {
-                var val = 1;
-                var i = val / 0;
-            }
-            catch (Exception)
-            {
-                _logger.LogError("Exception throw...");
-            }
+            //_logger.LogError("Exception throw...");
+
             _logger.LogDebug("Произведена выборка всех статей");
             return View(posts);
         }
@@ -66,6 +59,7 @@ namespace OkBlog.Controllers
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
+                Category = post.Category,
                 Image = post.Image,
                 Author = post.Author,
                 Tags = postTags,

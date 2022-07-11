@@ -21,6 +21,13 @@ namespace OkBlog.Data.Repository
             return _context.Posts.ToList();
         }
 
+        public List<Post> GetAllPosts(string category)
+        {
+            return _context.Posts
+                .Where(post => post.Category.ToLower().Equals(category.ToLower()))
+                .ToList();
+        }
+
         public Post GetPost(int id)
         {
             return _context.Posts

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OkBlog.Models.Db;
 using OkBlog.ViewModels;
+using OkBlog.Data.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,15 @@ namespace OkBlog.Controllers
         UserManager<ApplicationUser> _userManager;
         SignInManager<ApplicationUser> _signInManager;
         RoleManager<ApplicationRole> _roleManager;
+        private IRepository _postRepo;
         private readonly ILogger<PostsController> _logger;
 
-        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ILogger<PostsController> logger)
+        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IRepository postRepo, ILogger<PostsController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _postRepo = postRepo;
             _logger = logger;
         }
 
@@ -173,8 +176,19 @@ namespace OkBlog.Controllers
         public async Task<ActionResult> Delete(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
+            var userPosts = _postRepo.GetAllPosts().Where(p => p.UserId == id);
             if (user != null)
             {
+                if (user.Posts != null)
+                {
+                    foreach (var post in user.Posts)
+                    {
+                        _postRepo.RemovePost(post.Id);
+                        await _postRepo.SaveChangesAsync();
+                        _logger.LogTrace("Удаление статьи с id: " + post.Id);
+                    }
+                }
+
                 _logger.LogTrace($"Удаление пользователя: {user.Email} c Id: {id}");
 
                 IdentityResult result = await _userManager.DeleteAsync(user);

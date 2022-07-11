@@ -4,24 +4,27 @@
 
 }
 
-<h2>Информация о пользователе</h2>
+<div class="container-page">
+	<h2 class="title-margin">Информация о пользователе</h2>
 
-<table class="table table-striped">
-	<tr><th>Email</th><th>Имя</th><th>Фамилия</th><th>Дата регистрации</th></tr>
-	<tbody>
+	<table class="table table-striped">
+		<tr><th>Email</th><th>Имя</th><th>Фамилия</th><th>Дата регистрации</th></tr>
+		<tbody>
 		<tr>
 			<td>@Model.Email</td>
 			<td>@Model.FirstName</td>
 			<td>@Model.LastName</td>
 			<td>@Model.Created</td>
 			<td>
-			   <form class="right-position" asp-action="Delete" asp-route-id="@Model.Id" method="post">
-				   <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
-					  <button type="submit" class="btn btn-sm btn-danger">
-						  Удалить
-					  </button>
-			   </form>
+				<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+					<button type="submit" class="btn btn-sm btn-danger float-right btn-mrg">
+						Удалить
+					</button>
+					<a class="btn btn-sm btn-primary float-right btn-mrg" asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>
+				</form>
 			</td>
 		</tr>
-	</tbody>	
-</table>
+		</tbody>	
+	</table>
+</div>
+

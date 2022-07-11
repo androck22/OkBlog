@@ -3,36 +3,57 @@
 
 }
 
-<h2>Редактирование статьи</h2>
+<link href="~/lib/Trumbowyg-main/dist/ui/trumbowyg.min.css" rel="stylesheet"/>
 
-<form asp-controller="EditPost" asp-action="Upsert" method="post">
-	<input asp-for="Id" type="hidden" />
-	<table>		
-		@for (int i = 0; i < Model.Tags.Count; i++)
-		{
-			if(i % 3 == 0)
+<div class="container-page">
+	<h2 class="title-margin">Редактирование статьи</h2>
+
+	<form asp-controller="EditPost" asp-action="Upsert" method="post">
+		<input asp-for="Id" type="hidden" />
+		<table>		
+			@for (int i = 0; i < Model.Tags.Count; i++)
 			{
-				@:<tr></tr>
+				if(i % 3 == 0)
+				{
+					@:<tr></tr>
+				}
+				<td>
+					@Html.CheckBoxFor(model => model.Tags[i].IsSelected)
+					<lable>@Model.Tags[i].Name</lable>
+					@Html.HiddenFor(model => model.Tags[i].Id)
+				</td>
 			}
-			<td>
-				@Html.CheckBoxFor(model => model.Tags[i].IsSelected)
-				<lable>@Model.Tags[i].Name</lable>
-				@Html.HiddenFor(model => model.Tags[i].Id)
-			</td>
-		}
-	</table>
-	<div>
-		<label>Заголовок</label>
-		<input class="form-control" asp-for="Title" />
-	</div>
-	<div>
-		<label>Контент</label>
-		<textarea class="form-control" rows="10" value="" asp-for="Body" ></textarea>
-	</div>
-	<br />
-	<input class="btn btn-sm btn-primary" type="submit" value="Сохранить изменения" />
-</form>
-<p>
-	<br />
-    <a asp-controller="Posts" asp-action="Index">Вернуться к списку всех статей</a>
-</p>
+		</table>
+		<div>
+			<label>Заголовок</label>
+			<input class="form-control" asp-for="Title" />
+		</div>
+		<div>
+			<label>Контент</label>
+			<textarea class="form-control" id="editor" rows="10" value="" asp-for="Body" ></textarea>
+		</div>
+		<div>
+			<label>Категория</label>
+			<select class="form-control" asp-for="Category">
+				<option value="Programming">Programming</option>
+				<option value="Technology">Technology</option>
+				<option value="Travel">Travel</option>
+				<option value="Sports">Sports</option>
+			</select>
+		</div>
+		<br />
+		<input class="btn btn-sm btn-primary" type="submit" value="Сохранить изменения" />
+	</form>
+	<p>
+		<br />
+		<a asp-controller="Posts" asp-action="Index">Вернуться к списку всех статей</a>
+	</p>
+</div>
+
+@section scripts {
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="~/lib/Trumbowyg-main/dist/trumbowyg.min.js"></script>
+	<script>
+		$('#editor').trumbowyg();
+	</script>
+}

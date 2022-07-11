@@ -46,6 +46,7 @@ namespace OkBlog.Controllers
                     Id = post.Id,
                     Title = post.Title,
                     Body = post.Body,
+                    Category = post.Category,
                     Author = post.Author,
                     Tags = postTags
                 });
@@ -73,6 +74,7 @@ namespace OkBlog.Controllers
                     Id = post.Id,
                     Title = post.Title,
                     Body = post.Body,
+                    Category = post.Category,
                     Author = post.Author,
                     Tags = postTags
                 });
@@ -92,6 +94,7 @@ namespace OkBlog.Controllers
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
+                Category = post.Category,
                 Tags = postTags,
             };
             _logger.LogTrace("Редактирование статьи с id: " + post.Id);
@@ -109,6 +112,7 @@ namespace OkBlog.Controllers
                 Id = post.Id,
                 Title = post.Title = string.Empty,
                 Body = post.Body = string.Empty,
+                Category = post.Category = string.Empty,
                 Tags = allTags
             };
             _logger.LogTrace("Создание статьи с id: " + post.Id);
@@ -135,6 +139,7 @@ namespace OkBlog.Controllers
                 post = _repo.GetPost(model.Id);
                 post.Title = model.Title;
                 post.Body = model.Body;
+                post.Category = model.Category;
                 post.Author = userEmail;
                 post.Tags = dbTags;
                 post.UserId = userId;
@@ -146,6 +151,7 @@ namespace OkBlog.Controllers
                     Id = model.Id,
                     Title = model.Title,
                     Body = model.Body,
+                    Category = model.Category,
                     Image = await _fileManager.SaveImage(model.Image),
                     Tags = dbTags,
                     Author = userEmail,

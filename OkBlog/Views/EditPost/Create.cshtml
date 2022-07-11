@@ -3,51 +3,68 @@
 	ViewBag.Title = "Добавление статьи";
 }
 
+<link href="~/lib/Trumbowyg-main/dist/ui/trumbowyg.min.css" rel="stylesheet"/>
 
+<div class="container-page">
+	<h2 class="title-margin">Добавление статьи</h2>
 
-<h2>Добавление статьи</h2>
-
-<form method="post" asp-action="Upsert" asp-controller="EditPost" enctype="multipart/form-data">
-	<div asp-validation-summary="All" class="text-danger"></div>
-	<input asp-for="Id" type="hidden" />
-	<table>
-		<label>Теги</label>
-		@for (int i = 0; i < Model.Tags.Count; i++)
-		{
-			if(i % 3 == 0)
+	<form method="post" asp-action="Upsert" asp-controller="EditPost" enctype="multipart/form-data">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<input asp-for="Id" type="hidden" />
+		<table>
+			<label>Теги</label>
+			@for (int i = 0; i < Model.Tags.Count; i++)
 			{
-				@:<tr></tr>
+				if(i % 3 == 0)
+				{
+					@:<tr></tr>
+				}
+				<td>
+					@Html.CheckBoxFor(model => model.Tags[i].IsSelected)
+					<lable>@Model.Tags[i].Name</lable>
+					@Html.HiddenFor(model => model.Tags[i].Id)
+				</td>
 			}
-			<td>
-				@Html.CheckBoxFor(model => model.Tags[i].IsSelected)
-				<lable>@Model.Tags[i].Name</lable>
-				@Html.HiddenFor(model => model.Tags[i].Id)
-			</td>
-		}
-	</table>
-	<div class="form-group">
-		<label asp-for="Title">Заголовок</label><br />
-		<input asp-for="Title" class="form-control" />
-		<span asp-validation-for="Title" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="Body">Контент</label><br />
-		<textarea class="form-control" rows="10" value="" asp-for="Body" ></textarea>
-		<span asp-validation-for="Body" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="Image">Изображение</label><br />
-		<input asp-for="Image" class="form-control" ></input>
-	</div>
-	<input class="btn btn-sm btn-primary" type="submit" value="Добавить" />
-</form>
-<p>
-	<br />
-    <a asp-controller="Posts" asp-action="Index">Вернуться к списку всех статей</a>
-</p>
+		</table>
+		<div class="form-group">
+			<label asp-for="Title">Заголовок</label><br />
+			<input asp-for="Title" class="form-control" />
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Body">Контент</label><br />
+			<textarea class="form-control" id="editor" rows="10" value="" asp-for="Body" ></textarea>
+			<span asp-validation-for="Body" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Category">Категория</label><br />
+			<select class="form-control" asp-for="Category">
+				<option value="Programming">Programming</option>
+				<option value="Technology">Technology</option>
+				<option value="Travel">Travel</option>
+				<option value="Sports">Sports</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label asp-for="Image">Изображение</label><br />
+			<input asp-for="Image" class="form-control" ></input>
+		</div>
+		<input class="btn btn-sm btn-primary" type="submit" value="Добавить" />
+	</form>
+	<p>
+		<br />
+	    <a asp-controller="Posts" asp-action="Index">Вернуться к списку всех статей</a>
+	</p>
+</div>
 
-@section scripts{
+@section scripts {
  
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/lib/Trumbowyg-main/dist/trumbowyg.min.js"></script>
+    <script>
+	    $('#editor').trumbowyg();
+    </script>
 }

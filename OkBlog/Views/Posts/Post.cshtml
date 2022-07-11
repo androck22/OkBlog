@@ -1,11 +1,12 @@
 ﻿@model PostViewModel
 
 @{
-
+	//ViewBag.Title = Model.Title;
+	//ViewBag.Keywords = $"{Model.Category}";
 }
 
 <div class="container">
-	<h2>@Model.Title</h2>
+	<h2 style="margin: 30px 0">@Model.Title</h2>
 
 	<div>
 		@for (int i = 0; i < Model.Tags.Count; i++)
@@ -24,14 +25,19 @@
 			<a asp-controller="EditPost" asp-action="Edit" asp-route-id="@Model.Id">Редактировать статью</a>
 		</p>
 	}	
+	
+	<div class="post no-shadow">
+		@if(!String.IsNullOrEmpty(Model.Image))
+		{
+			var image_path = $"/Image/{Model.Image}";
+			<img src="@image_path" class="post-img" />
+		}
+	</div>
 
-	@if(!String.IsNullOrEmpty(Model.Image))
-	{
-		var image_path = $"/Image/{Model.Image}";
-		<img src="@image_path" width="500" />
-	}
 
-	<div>@Model.Body</div>
+	<div class="post-body">
+		@Html.Raw(Model.Body)
+	</div>
 
 	<div>
 		<br />
@@ -39,35 +45,41 @@
 	</div>
 
 	<br />
+	<hr  />
 
-	<div class="comment-section">
+	<div>
 		<h6>Комментарии к статье</h6>
 		
 		@foreach (var c in Model.MainComments)
 		{
-			<div>
-				@c.Message
-			</div>
-			<p class="card-body">
-				<span class="badge bg-success text-white float-right">@c.UserName</span>
-				<span>- @c.Created -</span>
-			</p>
-			<br />
-			@*<div style="margin-left: 20px;">
-				<h6>Sub Comment</h6>
-				@{
-					await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
-				}
+			<div class="comment-body" style="margin: 5px 0">
+				<div style="margin: 15px 15px ">
+					@c.Message
+				</div>
+				<p style="margin: 0 10px">
+					<span class="badge bg-success text-white float-right">@c.UserName</span>
+					<span class="date-comment">- @c.Created -</span>
+				</p>
 
-				@foreach(var sc in c.SubComments)
-				{
-					<p>
-						@sc.Message --- @sc.Created
-					</p>
-				}
-			</div>*@
+				@*<div style="margin-left: 20px;">
+					<h6>Sub Comment</h6>
+					@{
+						await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
+					}
+
+					@foreach(var sc in c.SubComments)
+					{
+						<p>
+							@sc.Message --- @sc.Created
+						</p>
+					}
+				</div>*@
+			</div>
+
 		}
 		<br />
+		<hr  />
+
 		<h6>Оставте ваш комментарий</h6>
 
 		@{

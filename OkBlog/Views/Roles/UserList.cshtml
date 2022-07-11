@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<OkBlog.Models.Db.ApplicationUser>
  
-<h2>Список пользователей</h2>
-<table class="table">
-    @foreach (var user in Model)
-    {
-        <tr>
-            <td>@user.Email</td>
-            <td>
-                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-userid="@user.Id">Права доступа</a>
-            </td>
-        </tr>
-    }
-</table>
+<div class="container-page">
+	<h2 class="title-margin">Список пользователей</h2>
+	<table class="table">
+		@foreach (var user in Model)
+		{
+			<tr>
+				<td>@user.Email</td>
+				<td>
+					<a class="btn btn-sm btn-primary float-right btn-mrg" asp-action="Edit" asp-route-userid="@user.Id">Права доступа</a>
+				</td>
+			</tr>
+		}
+	</table>
+</div>

@@ -1,26 +1,28 @@
 ﻿@model CreateRoleViewModel
  
-<div asp-validation-summary="All" class="text-danger"></div>
+<div class="container-page">
+	<div asp-validation-summary="All" class="text-danger"></div>
 
-<h2>Добавление роли</h2>
+	<h2 class="title-margin">Добавление роли</h2>
  
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <div class="form-group">
-            <label for="Name">Новая роль</label>
-            <input name="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="Description">Описание</label>
-            <textarea name="Description" class="form-control" rows="3" value=""></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
-    <br />
-    <br />
-	<p>
-		<a class="add-user" asp-action="Index">Перейти к списку всех ролей</a>
-	</p>
-</form>
+	<form asp-action="Create" method="post">
+		<div class="form-group">
+			<div class="form-group">
+				<label for="Name">Новая роль</label>
+				<input name="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label for="Description">Описание</label>
+				<textarea name="Description" class="form-control" rows="3" value=""></textarea>
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-sm btn-primary">Добавить</button>
+		<br />
+		<br />
+		<p>
+			<a class="add-user" asp-action="Index">Перейти к списку всех ролей</a>
+		</p>
+	</form>
+</div>

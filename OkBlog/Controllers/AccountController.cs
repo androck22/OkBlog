@@ -109,7 +109,7 @@ namespace OkBlog.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Posts");
                     }
                 }
                 else
