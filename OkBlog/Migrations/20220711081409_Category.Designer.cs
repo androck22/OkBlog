@@ -207,7 +207,7 @@ namespace OkBlog.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Author")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -238,7 +238,7 @@ namespace OkBlog.Migrations
                     b.Property<int?>("PostId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Author")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -263,7 +263,7 @@ namespace OkBlog.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Author")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

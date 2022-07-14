@@ -1,8 +1,7 @@
 ﻿@model PostViewModel
 
 @{
-	//ViewBag.Title = Model.Title;
-	//ViewBag.Keywords = $"{Model.Category}";
+
 }
 
 <div class="container">
@@ -10,12 +9,12 @@
 
 	<div>
 		@for (int i = 0; i < Model.Tags.Count; i++)
+		{
+			if (Model.Tags[i].IsSelected)
 			{
-				if (Model.Tags[i].IsSelected)
-				{
-					<span class="badge bg-primary text-white">@Model.Tags[i].Name</span>
-				}	
-			}
+				<span class="badge bg-primary text-white">@Model.Tags[i].Name</span>
+			}	
+		}
 	</div>
 	<br />
 	
@@ -35,7 +34,7 @@
 	</div>
 
 
-	<div class="post-body">
+	<div class="post-body color">
 		@Html.Raw(Model.Body)
 	</div>
 
@@ -48,43 +47,44 @@
 	<hr  />
 
 	<div>
-		<h6>Комментарии к статье</h6>
-		
+		<div>
+			<p class="float-right" style="margin: -1px 5px">Количество комментариев: @Model.MainComments.Count</p>
+			<h6>Комментарии к статье</h6>
+		</div>
+
+
 		@foreach (var c in Model.MainComments)
 		{
-			<div class="comment-body" style="margin: 5px 0">
-				<div style="margin: 15px 15px ">
-					@c.Message
+			<div class="grid comment-body color" style="margin: 5px 0">
+				<div style="margin: 15px 15px">
+					@Html.Raw(c.Message)
 				</div>
-				<p style="margin: 0 10px">
-					<span class="badge bg-success text-white float-right">@c.UserName</span>
-					<span class="date-comment">- @c.Created -</span>
-				</p>
-
-				@*<div style="margin-left: 20px;">
-					<h6>Sub Comment</h6>
-					@{
-						await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
-					}
-
-					@foreach(var sc in c.SubComments)
+				<div>
+					@if (c.Author == Model.CurrentUserName || @User.IsInRole("Admin") || @User.IsInRole("Moderator"))
 					{
-						<p>
-							@sc.Message --- @sc.Created
-						</p>
+						await Html.RenderPartialAsync("_EditMainComment", new EditCommentViewModel { PostId = Model.Id, MainCommentId = c.Id, Message = c.Message, Author = c.Author});
 					}
-				</div>*@
+				</div>
+				<div style="margin: 0 10px">
+					<span class="date-comment">- @c.Created -</span>
+				</div>
+				<div>
+					<span class="badge bg-success text-white" style="margin: 0 0 0 69px">@c.Author</span>
+				</div>
 			</div>
-
 		}
-		<br />
-		<hr  />
+		@if (User.Identity.IsAuthenticated)
+		{
+			<br/>
+			<hr/>
 
-		<h6>Оставте ваш комментарий</h6>
+			<h6>Оставте ваш комментарий</h6>
 
-		@{
 			await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
 		}
+
 	</div>
 </div>
+
+
 

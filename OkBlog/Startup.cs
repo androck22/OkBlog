@@ -46,6 +46,7 @@ namespace OkBlog
             services.AddTransient<IRepository, Repository>();
             services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
 
             services.AddTransient<IUserValidator<ApplicationUser>, CustomUserValidator>();
 

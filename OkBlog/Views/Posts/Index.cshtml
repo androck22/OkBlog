@@ -14,7 +14,7 @@
 		var image_path = $"/Image/{post.Image}";
 		<a class="post" asp-controller="Posts" asp-action="Post" asp-route-id="@post.Id">
 			<img src="@image_path" class="post-img"/>
-			<span class="title">
+			<span class="title-posts">
 				@post.Title
 			</span>
 		</a>

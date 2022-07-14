@@ -21,14 +21,16 @@ namespace OkBlog.Controllers
         private IFileManager _fileManager;
         private readonly ILogger<PostsController> _logger;
         UserManager<ApplicationUser> _userManager;
+        private ICommentRepository _commentRepo;
 
-        public PostsController(IRepository repo, ITagRepository tagRepo, IFileManager fileManager, ILogger<PostsController> logger, UserManager<ApplicationUser> userManager)
+        public PostsController(IRepository repo, ITagRepository tagRepo, IFileManager fileManager, ILogger<PostsController> logger, UserManager<ApplicationUser> userManager, ICommentRepository commentRepo)
         {
             _repo = repo;
             _tagRepo = tagRepo;
             _fileManager = fileManager;
             _logger = logger;
             _userManager = userManager;
+            _commentRepo = commentRepo;
         }
 
         public IActionResult Index(string category)
@@ -82,6 +84,7 @@ namespace OkBlog.Controllers
         public async Task<IActionResult> Comment(CommentViewModel model)
         {
             var userEmail = _userManager.GetUserName(HttpContext.User);
+            var userId = _userManager.GetUserId(HttpContext.User);
 
 
             if (!ModelState.IsValid)
@@ -91,12 +94,15 @@ namespace OkBlog.Controllers
             if(model.MainCommentId == 0)
             {
                 post.MainComments = post.MainComments ?? new List<MainComment>();
+                var comment = _commentRepo.GetComment(model.MainCommentId);
 
                 post.MainComments.Add(new MainComment
                 {
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName = userEmail,
+                    Author = userEmail,
+                    PostId = post.Id,
+                    UserId = userId
                 });
 
                 PostViewModel vm = new PostViewModel();
@@ -105,8 +111,11 @@ namespace OkBlog.Controllers
                     Id = model.PostId,
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName = userEmail,
+                    Author = userEmail,
+                    PostId = post.Id,
+                    UserId = userId
                 });
+                vm.CurrentUserName = userEmail;
 
                 _repo.UpdatePost(post);                
             }
@@ -117,7 +126,9 @@ namespace OkBlog.Controllers
                     MainCommentId = model.MainCommentId,
                     Message = model.Message,
                     Created = DateTime.Now,
-                    UserName = userEmail,
+                    Author = userEmail,
+                    PostId = post.Id,
+                    UserId = userId
                 };
                 _repo.AddSubComment(comment);
             }
@@ -125,6 +136,28 @@ namespace OkBlog.Controllers
             await _repo.SaveChangesAsync();
 
             return RedirectToAction("Post", new { id = model.PostId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveComment(int id)
+        {
+            var post = _repo.GetPost(id);
+
+            if (post != null)
+            {
+                var comment = post.MainComments.FirstOrDefault(x => x.Id == 1);
+
+                var comment2 = post.MainComments.Remove(comment);
+
+                if (comment2)
+                {
+                    _repo.UpdatePost(post);
+                }
+            }
+
+            await _repo.SaveChangesAsync();
+            return RedirectToAction("Post", new { id = id });
+
         }
     }
 }

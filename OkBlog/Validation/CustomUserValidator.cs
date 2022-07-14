@@ -18,7 +18,7 @@ namespace OkBlog.Validation
                     Description = "Данный домен находится в спам-базе. Выберите другой почтовый сервис"
                 });
             }
-            //if (user.UserName.Contains("admin"))
+            //if (user.Author.Contains("admin"))
             //{
             //    errors.Add(new IdentityError
             //    {

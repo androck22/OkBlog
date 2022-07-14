@@ -6,11 +6,11 @@
 
 <div>
 	<form method="post" asp-controller="Posts" asp-action="Comment">
-		<div class="form-group">
+		<div class="form-group color">
 			<input asp-for="PostId" type="hidden" />
 			<input asp-for="MainCommentId" type="hidden" />
 			<textarea asp-for="Message" class="form-control" rows="3" placeholder="Введите текст комментария."></textarea>	
 		</div>		
-		<button class="btn btn-sm btn-primary" type="submit">Оставить комментарий</button>
+		<button class="btn btn-sm btn-primary" style="margin-bottom: 55px" type="submit">Оставить комментарий</button>
 	</form>
 </div>

@@ -71,6 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Comments\Edit.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />

@@ -122,11 +122,14 @@ namespace OkBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Upsert(CreatePostViewModel model)
         {
-            var postTags = model.Tags.Where(t => t.IsSelected == true).ToList();
+            var dbTags = new List<Tag>();
 
-            var tagsId = postTags.Select(t => t.Id).ToList();
-
-            var dbTags = _tagRepo.GetAllTags().Where(t => tagsId.Contains(t.Id)).ToList();
+            if (model.Tags != null)
+            {
+                var postTags = model.Tags.Where(t => t.IsSelected == true).ToList();
+                var tagsId = postTags.Select(t => t.Id).ToList();
+                dbTags = _tagRepo.GetAllTags().Where(t => tagsId.Contains(t.Id)).ToList();
+            }
 
             var userId = _userManager.GetUserId(HttpContext.User);
 

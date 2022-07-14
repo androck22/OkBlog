@@ -33,8 +33,11 @@
 		</div>
 		<div class="form-group">
 			<label asp-for="Body">Контент</label><br />
-			<textarea class="form-control" id="editor" rows="10" value="" asp-for="Body" ></textarea>
-			<span asp-validation-for="Body" class="text-danger"></span>
+			<div class="color">
+				<textarea class="form-control" id="editor" rows="10" value="" asp-for="Body" ></textarea>
+				<span asp-validation-for="Body" class="text-danger"></span>
+			</div>
+			
 		</div>
 		<div class="form-group">
 			<label asp-for="Category">Категория</label><br />
@@ -42,12 +45,12 @@
 				<option value="Programming">Programming</option>
 				<option value="Technology">Technology</option>
 				<option value="Travel">Travel</option>
-				<option value="Sports">Sports</option>
+				<option value="Music">Music</option>
 			</select>
 		</div>
 		<div class="form-group">
 			<label asp-for="Image">Изображение</label><br />
-			<input asp-for="Image" class="form-control" ></input>
+			<input asp-for="Image" class="form-control" />
 		</div>
 		<input class="btn btn-sm btn-primary" type="submit" value="Добавить" />
 	</form>

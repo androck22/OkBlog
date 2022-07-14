@@ -1,0 +1,18 @@
+﻿@using System.Net
+@model EditCommentViewModel
+
+@{
+
+}
+
+<div>
+	<div class="form-group" style="margin: 0 0 0 40px">
+		<input asp-for="PostId" type="hidden"/>
+		<input asp-for="Author" type="hidden"/>
+		<input asp-for="CurrentUserName" type="hidden"/>
+		<input asp-for="MainCommentId" type="hidden"/>
+		<a asp-controller="Comments" asp-action="Edit" asp-route-id="@Model.MainCommentId" style="font-size: 14px">Редактировать</a>
+		<span style="margin: 1px"></span>
+		<a asp-controller="Comments" asp-action="Delete" asp-route-id="@Model.MainCommentId" style="font-size: 14px">Удалить</a>
+	</div>
+</div>
