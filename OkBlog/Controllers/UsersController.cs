@@ -199,7 +199,7 @@ namespace OkBlog.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            return RedirectToAction("Register", "Account");
+            return RedirectToAction("Login", "Account");
         }
     }
 }
