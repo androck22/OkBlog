@@ -19,11 +19,12 @@
 				}
 				<td>
 					@Html.CheckBoxFor(model => model.Tags[i].IsSelected)
-					<lable>@Model.Tags[i].Name</lable>
+					<lable class="tag-margin">@Model.Tags[i].Name</lable>
 					@Html.HiddenFor(model => model.Tags[i].Id)
 				</td>
 			}
 		</table>
+		<hr>
 		<div>
 			<label class="title-size">Заголовок</label>
 			<input class="form-control" style="margin: 0 0 10px 0" asp-for="Title" />

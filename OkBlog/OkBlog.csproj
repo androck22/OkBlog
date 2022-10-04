@@ -103,6 +103,7 @@
     <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
     <None Include="wwwroot\lib\Trumbowyg-main\.bowerrc" />
+    <None Include="wwwroot\lib\Trumbowyg-main\.editorconfig" />
     <None Include="wwwroot\lib\Trumbowyg-main\.gitattributes" />
     <None Include="wwwroot\lib\Trumbowyg-main\.github\FUNDING.yml" />
     <None Include="wwwroot\lib\Trumbowyg-main\.github\ISSUE_TEMPLATE.md" />
@@ -263,8 +264,7 @@
     <None Include="wwwroot\lib\Trumbowyg-main\dist\trumbowyg.min.js" />
     <None Include="wwwroot\lib\Trumbowyg-main\dist\ui\icons.svg" />
     <None Include="wwwroot\lib\Trumbowyg-main\dist\ui\sass\trumbowyg.scss" />
-    <None Include="wwwroot\lib\Trumbowyg-main\dist\ui\trumbowyg.js" />
-    <None Include="wwwroot\lib\Trumbowyg-main\dist\ui\trumbowyg.min.js" />
+    <None Include="wwwroot\lib\Trumbowyg-main\dist\ui\trumbowyg.min.css.map" />
     <None Include="wwwroot\lib\Trumbowyg-main\docs\.gitignore" />
     <None Include="wwwroot\lib\Trumbowyg-main\docs\.jshintrc" />
     <None Include="wwwroot\lib\Trumbowyg-main\docs\demos\js\highlight.js" />
